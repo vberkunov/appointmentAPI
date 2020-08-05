@@ -1,27 +1,31 @@
 package com.appointment.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+
+
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Set;
 
-@Getter
-@Setter
-@Entity
-@Table(name = "users")
+@MappedSuperclass
+@Data
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @Column(name = "email")
     private String email;
+
+    @Column(name = "username")
+    private String username;
+
     @Column(name = "password")
     private String password;
-    @Transient
-    private String confirmPassword;
+
     @Column(name = "firstName")
     private String firstName;
+
     @Column(name = "lastName")
     private String lastName;
     @ManyToMany

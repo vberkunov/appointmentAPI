@@ -1,7 +1,6 @@
 package com.appointment.validator;
 
 import com.appointment.entity.User;
-import com.appointment.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

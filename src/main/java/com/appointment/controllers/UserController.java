@@ -1,8 +1,6 @@
 package com.appointment.controllers;
 
 import com.appointment.entity.User;
-import com.appointment.services.SecurityService;
-import com.appointment.services.UserService;
 import com.appointment.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;

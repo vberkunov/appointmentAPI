@@ -5,16 +5,10 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.Set;
 
-@Getter
-@Setter
-@Builder
+@Data
 @Table(name = "teacher")
 @Entity
-public class Teacher {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class Teacher extends User {
 
     @OneToMany(mappedBy = "teacher",  cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)

@@ -1,10 +1,10 @@
 package com.appointment.repositories;
 
-import com.appointment.entity.User;
+import com.appointment.entity.Teacher;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<User,Long> {
-    User findByEmail(String email);
+public interface TeacherRepository extends JpaRepository<Teacher, Long> {
+    Teacher findByUsername(String username);
 }
