@@ -13,20 +13,25 @@ import java.sql.Date;
 @Table(name = "lesson")
 @Entity
 public class Lesson {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @ManyToOne(targetEntity = Teacher.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "teacher_id", referencedColumnName = "id", nullable = false)
     private Teacher teacher;
-    @Temporal(TemporalType.TIME)
+
     private String description;
+
     private Date reservedTime;
-    @Temporal(TemporalType.DATE)
+
     private Date reservedDate;
-    @OneToOne(mappedBy = "lesson", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, optional = false)
+
+    @OneToOne(targetEntity = Participant.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "participant_id", referencedColumnName = "id")
     private Participant participant;
+
 
 
 
