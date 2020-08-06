@@ -16,5 +16,7 @@ public interface StudentService {
     Student findById(Long id);
 
     void delete(Long id);
+
+    Student findByEmail(String email);
 }
 

@@ -14,6 +14,10 @@ public class Teacher extends User {
             fetch = FetchType.LAZY)
     private Set<Lesson> lessons;
 
+    @ManyToMany
+    @JoinTable(name = "teacher_roles", joinColumns = @JoinColumn(name = "teacher_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 
 
 }

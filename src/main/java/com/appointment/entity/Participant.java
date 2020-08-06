@@ -19,7 +19,7 @@ public class Participant {
     private boolean confirmation;
 
     @OneToOne(targetEntity = Student.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "student_id", referencedColumnName = "id")
+    @JoinColumn(name = "id")
     private Student student;
 
     @OneToOne(mappedBy = "participant", cascade = CascadeType.ALL,
