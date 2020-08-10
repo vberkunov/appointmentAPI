@@ -1,33 +1,29 @@
-package com.appointment.security;
+package com.appointment.security.services;
 
 import com.appointment.entity.Student;
-import com.appointment.security.jwt.JwtUser;
-import com.appointment.security.jwt.JwtUserFactory;
 import com.appointment.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class StudentDetailService implements UserDetailsService {
-
-    private final StudentService studentService;
+public class StudentDetailsService implements UserDetailsService {
 
     @Autowired
-    public StudentDetailService(StudentService studentService) {
+    private final StudentService studentService;
+
+    public StudentDetailsService(StudentService studentService) {
         this.studentService = studentService;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    @Transactional
+    public StudentDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Student student = studentService.findByUsername(username);
 
-        if(student == null){
-            throw new UsernameNotFoundException("Student with username" + username + "not found");
-        }
-        JwtUser jwtUser = JwtUserFactory.create(student);
-        return jwtUser;
+        return StudentDetails.build(student);
     }
 }

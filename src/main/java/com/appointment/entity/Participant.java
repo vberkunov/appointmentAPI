@@ -9,7 +9,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "student")
+@Table(name = "participant")
 @Entity
 public class Participant {
     @Id
@@ -19,10 +19,12 @@ public class Participant {
     private boolean confirmation;
 
     @OneToOne(targetEntity = Student.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "student_id", referencedColumnName = "id")
     private Student student;
 
-    @OneToOne(mappedBy = "participant", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, optional = false)
+
+    @OneToOne(mappedBy = "participant")
     private Lesson lesson;
+
+
 }

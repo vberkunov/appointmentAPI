@@ -20,13 +20,12 @@ public class StudentServiceImpl implements StudentService {
 
     private final RoleRepository roleRepository;
 
-    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public StudentServiceImpl(StudentRepository studentRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder) {
+    public StudentServiceImpl(StudentRepository studentRepository, RoleRepository roleRepository) {
         this.studentRepository = studentRepository;
         this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
+
     }
 
     @Override
@@ -35,7 +34,6 @@ public class StudentServiceImpl implements StudentService {
         Set<Role> userRoles = new HashSet<>();
         userRoles.add(role);
 
-        student.setPassword(passwordEncoder.encode(student.getPassword()));
         student.setRoles(userRoles);
 
 

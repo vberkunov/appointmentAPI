@@ -13,14 +13,14 @@ import java.util.Set;
 @Entity
 public class Student extends User {
 
-    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, optional = false)
+    @OneToOne(mappedBy = "student")
     private Participant participant;
 
     @ManyToMany
     @JoinTable(name = "student_roles", joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
+
 
 
 }
