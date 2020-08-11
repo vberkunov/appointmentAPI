@@ -1,17 +1,19 @@
 package com.appointment.validator;
 
 import com.appointment.entity.Student;
+import com.appointment.entity.User;
 import com.appointment.services.StudentService;
+import com.appointment.services.implementation.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 @Component
-public class StudentValidator implements Validator {
+public class UserValidator implements Validator {
 
     @Autowired
-    private StudentService service;
+    private UserServiceImpl service;
 
     @Override
     public boolean supports(Class<?> aClass) {
@@ -20,17 +22,17 @@ public class StudentValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        Student student = (Student) o;
+        User user = (User) o;
         ValidationUtils.rejectIfEmptyOrWhitespace(errors,"email","Required");
-        if(student.getEmail().length() < 8 || student.getEmail().length() > 35){
+        if(user.getEmail().length() < 8 || user.getEmail().length() > 35){
             errors.rejectValue("email","Size.userForm.email");
         }
-        if (service.findByUsername(student.getUsername()) != null) {
+        if (service.findByUsername(user.getUsername()) != null) {
             errors.rejectValue("username", "Duplicate.userForm.username");
         }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "Required");
-        if (student.getPassword().length() < 8 || student.getPassword().length() > 32) {
+        if (user.getPassword().length() < 8 || user.getPassword().length() > 32) {
             errors.rejectValue("password", "Size.userForm.password");
         }
 

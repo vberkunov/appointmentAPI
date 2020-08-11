@@ -1,8 +1,9 @@
 package com.appointment.config;
 
 import com.appointment.security.jwt.AuthEntryPointJwt;
-import com.appointment.security.jwt.AuthTokenFilter;
-import com.appointment.security.services.StudentDetailsService;
+import com.appointment.security.jwt.UserTokenFilter;
+import com.appointment.security.services.UserDetailsServiceImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,25 +21,25 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
-        // securedEnabled = true,
-        // jsr250Enabled = true,
+
         prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class StudentSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    StudentDetailsService studentDetailsService;
+    UserDetailsServiceImpl userDetailsServiceImpl;
+
 
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
 
     @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter();
+    public UserTokenFilter authenticationStudentTokenFilter() {
+        return new UserTokenFilter();
     }
 
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder.userDetailsService(studentDetailsService).passwordEncoder(passwordEncoder());
+        authenticationManagerBuilder.userDetailsService(userDetailsServiceImpl).passwordEncoder(passwordEncoder());
     }
 
     @Bean
@@ -61,7 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/test/**").permitAll()
                 .anyRequest().authenticated();
 
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(authenticationStudentTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
 }

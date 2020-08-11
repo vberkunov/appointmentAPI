@@ -1,17 +1,19 @@
 package com.appointment.security.services;
 
-import com.appointment.entity.Student;
+import com.appointment.entity.Role;
+import com.appointment.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class StudentDetails implements UserDetails {
+public class UserDetailsImpl implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
@@ -26,7 +28,8 @@ public class StudentDetails implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public StudentDetails(Long id, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsImpl(Long id, String username, String email, String password,
+                           Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -34,22 +37,32 @@ public class StudentDetails implements UserDetails {
         this.authorities = authorities;
     }
 
-    public static StudentDetails build(Student student) {
-        List<GrantedAuthority> authorities = student.getRoles().stream()
+    public static UserDetailsImpl build(User user) {
+        List<Role> roles = new LinkedList<>();
+        roles.add(user.getRole());
+        List<GrantedAuthority> authorities = roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
 
-        return new StudentDetails(
-                student.getId(),
-                student.getUsername(),
-                student.getEmail(),
-                student.getPassword(),
+        return new UserDetailsImpl(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getPassword(),
                 authorities);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     @Override
@@ -60,14 +73,6 @@ public class StudentDetails implements UserDetails {
     @Override
     public String getUsername() {
         return username;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     @Override
@@ -96,7 +101,7 @@ public class StudentDetails implements UserDetails {
             return true;
         if (o == null || getClass() != o.getClass())
             return false;
-        StudentDetails student = (StudentDetails) o;
-        return Objects.equals(id, student.id);
+        UserDetailsImpl user = (UserDetailsImpl) o;
+        return Objects.equals(id, user.id);
     }
 }

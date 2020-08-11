@@ -21,9 +21,8 @@ public class Role {
     @Column(name="name")
     private String name;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-    private Set<Student> students;
+    @OneToMany(mappedBy = "role")
+    private Set<User> user;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-    private Set<Teacher> teachers;
+
 }

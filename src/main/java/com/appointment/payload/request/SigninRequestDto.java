@@ -1,4 +1,4 @@
-package com.appointment.dto;
+package com.appointment.payload.request;
 
 import lombok.Data;
 

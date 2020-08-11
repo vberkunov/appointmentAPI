@@ -7,11 +7,12 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 
-@MappedSuperclass
-@AllArgsConstructor
+@Entity
 @NoArgsConstructor
+@Table(name = "users")
 @Getter
 @Setter
 public class User {
@@ -46,5 +47,22 @@ public class User {
     @Column(name = "status")
     private Status status;
 
+    @ManyToOne(targetEntity = Role.class, cascade = CascadeType.ALL)
+    @JoinColumn(name="cart_id", referencedColumnName = "id", nullable=false)
+    private Role role;
 
+    @OneToOne(mappedBy = "user")
+    private Student student;
+
+    @OneToOne(mappedBy = "user")
+    private Teacher teacher;
+
+    public User(String email, String username, String password, String firstName, String lastName ) {
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+
+    }
 }

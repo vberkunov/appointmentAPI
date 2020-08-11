@@ -1,7 +1,5 @@
-package com.appointment.dto;
+package com.appointment.payload.request;
 
-
-import com.appointment.entity.Role;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -29,5 +27,5 @@ public class SignupRequestDto {
     @Size(min = 2, max = 20)
     private String lastName;
 
-    private Set<String> roles;
+    private String role;
 }

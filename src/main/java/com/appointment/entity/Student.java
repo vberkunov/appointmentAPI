@@ -3,24 +3,26 @@ package com.appointment.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Set;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Table(name = "student")
 @Entity
-public class Student extends User {
+public class Student {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @OneToOne(targetEntity = User.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     @OneToOne(mappedBy = "student")
     private Participant participant;
 
-    @ManyToMany
-    @JoinTable(name = "student_roles", joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
-
-
-
+    public Student(User user) {
+        this.user = user;
+    }
 }
