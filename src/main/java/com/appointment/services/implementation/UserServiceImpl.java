@@ -4,12 +4,12 @@ import com.appointment.entity.Role;
 import com.appointment.entity.Student;
 import com.appointment.entity.Teacher;
 import com.appointment.entity.User;
+import com.appointment.payload.response.ParticipantResponse;
 import com.appointment.repositories.RoleRepository;
 import com.appointment.repositories.StudentRepository;
 import com.appointment.repositories.TeacherRepository;
 import com.appointment.repositories.UserRepository;
 import com.appointment.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,9 +26,6 @@ public class UserServiceImpl implements UserService {
 
     private final RoleRepository roleRepository;
 
-
-
-    @Autowired
     public UserServiceImpl(UserRepository userRepository, StudentRepository studentRepository, TeacherRepository teacherRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.studentRepository = studentRepository;

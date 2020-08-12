@@ -27,16 +27,16 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/auth")
 public class AuthController {
     @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    UserServiceImpl userService;
+    private UserServiceImpl userService;
 
     @Autowired
-    PasswordEncoder encoder;
+    private PasswordEncoder encoder;
 
     @Autowired
-    JwtUtils jwtUtils;
+    private JwtUtils jwtUtils;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody SigninRequestDto requestDto) {

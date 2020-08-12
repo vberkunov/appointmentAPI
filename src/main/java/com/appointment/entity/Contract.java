@@ -4,27 +4,31 @@ import lombok.*;
 
 import javax.persistence.*;
 
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "participant")
+@Table(name = "contract")
 @Entity
-public class Participant {
+public class Contract {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private boolean confirmation;
 
-    @OneToOne(targetEntity = Student.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "student_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name="student_id", nullable=false)
     private Student student;
 
-
-    @OneToOne(mappedBy = "participant")
+    @ManyToOne
+    @JoinColumn(name="lesson_id", nullable=false)
     private Lesson lesson;
+
+
+
 
 
 }

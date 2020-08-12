@@ -48,7 +48,7 @@ public class User {
     private Status status;
 
     @ManyToOne(targetEntity = Role.class, cascade = CascadeType.ALL)
-    @JoinColumn(name="cart_id", referencedColumnName = "id", nullable=false)
+    @JoinColumn(name="role_id", referencedColumnName = "id", nullable=false)
     private Role role;
 
     @OneToOne(mappedBy = "user")
@@ -64,5 +64,7 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
 
+
     }
+
 }

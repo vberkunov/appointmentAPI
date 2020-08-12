@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -28,11 +29,13 @@ public class Lesson {
 
     private Date reservedDate;
 
-    @OneToOne(targetEntity = Participant.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "participant_id", referencedColumnName = "id")
-    private Participant participant;
+    @OneToMany(mappedBy="lesson")
+    private Set<Contract> contracts;
 
-
-
-
+    public Lesson(Teacher teacher, String description, Date reservedTime, Date reservedDate) {
+        this.teacher = teacher;
+        this.description = description;
+        this.reservedTime = reservedTime;
+        this.reservedDate = reservedDate;
+    }
 }

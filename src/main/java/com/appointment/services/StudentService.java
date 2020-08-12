@@ -1,22 +1,13 @@
 package com.appointment.services;
 
-import com.appointment.entity.Student;
-import org.springframework.stereotype.Service;
+import com.appointment.entity.User;
+import com.appointment.payload.response.ParticipantResponse;
 
-import java.util.List;
+
 
 
 public interface StudentService {
-    Student register(Student student);
+    ParticipantResponse getParticipant(Long id);
 
-    List<Student> getAll();
-
-    Student findByUsername(String username);
-
-    Student findById(Long id);
-
-    void delete(Long id);
-
-    Student findByEmail(String email);
 }
 

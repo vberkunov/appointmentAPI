@@ -3,6 +3,7 @@ package com.appointment.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @NoArgsConstructor
 @Getter
@@ -19,8 +20,8 @@ public class Student {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @OneToOne(mappedBy = "student")
-    private Participant participant;
+    @OneToMany(mappedBy="student")
+    private Set<Contract> contracts;
 
     public Student(User user) {
         this.user = user;
