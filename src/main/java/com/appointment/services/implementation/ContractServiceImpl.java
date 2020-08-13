@@ -1,6 +1,7 @@
 package com.appointment.services.implementation;
 
 import com.appointment.entity.Contract;
+import com.appointment.entity.Lesson;
 import com.appointment.entity.Student;
 import com.appointment.repositories.ContractRepository;
 import com.appointment.repositories.StudentRepository;
@@ -50,6 +51,22 @@ public class ContractServiceImpl implements ContractService {
         }
         else throw new NotFoundException("student not found!");
 
+    }
+
+    @Override
+    public void createContract(Student student, Lesson lesson) {
+        Contract contract = new Contract(student,lesson);
+        contractRepository.save(contract);
+    }
+
+    @Override
+    public Contract findById(Long id) {
+        return contractRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public void delete(Contract contract) {
+        contractRepository.delete(contract);
     }
 
 }

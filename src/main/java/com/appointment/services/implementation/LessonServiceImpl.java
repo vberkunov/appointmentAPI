@@ -5,6 +5,8 @@ import com.appointment.repositories.LessonRepository;
 import com.appointment.services.LessonService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class LessonServiceImpl implements LessonService {
 
@@ -17,5 +19,15 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public void save(Lesson newLesson) {
         lessonRepository.save(newLesson);
+    }
+
+    @Override
+    public List<Lesson> getAll() {
+        return lessonRepository.findAll();
+    }
+
+    @Override
+    public Lesson findById(Long id) {
+        return lessonRepository.findById(id).orElse(null);
     }
 }

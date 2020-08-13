@@ -28,7 +28,8 @@ public class Contract {
     private Lesson lesson;
 
 
-
-
-
+    public Contract(Student student, Lesson lesson) {
+        this.student = student;
+        this.lesson = lesson;
+    }
 }
