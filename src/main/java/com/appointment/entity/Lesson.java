@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.sql.Time;
 import java.util.Set;
 
 @Getter
@@ -26,17 +27,23 @@ public class Lesson {
 
     private String description;
 
-    private Date reservedTime;
+    private Time timeFrom;
+
+    private Time timeTo;
+
+    private String price;
 
     private Date reservedDate;
 
     @OneToMany(mappedBy="lesson")
     private Set<Contract> contracts;
 
-    public Lesson(Teacher teacher, String description, Date reservedTime, Date reservedDate) {
+    public Lesson(Teacher teacher, String description, Time timeFrom, Time timeTo, String price, Date reservedDate) {
         this.teacher = teacher;
         this.description = description;
-        this.reservedTime = reservedTime;
+        this.timeFrom = timeFrom;
+        this.timeTo = timeTo;
+        this.price = price;
         this.reservedDate = reservedDate;
     }
 }

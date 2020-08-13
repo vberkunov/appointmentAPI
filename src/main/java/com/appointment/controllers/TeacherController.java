@@ -39,8 +39,6 @@ public class TeacherController {
 
 
 
-
-
     @PreAuthorize("hasRole('TEACHER')")
     @PostMapping("/create")
     public ResponseEntity<?> createNewLesson(@Valid @RequestBody LessonRequest lessonRequest){
@@ -48,20 +46,31 @@ public class TeacherController {
         Teacher currentTeacher = teacherService.getCurrentTeacher();
 
         Lesson newLesson = new Lesson(currentTeacher,lessonRequest.getDescription(),
-                lessonRequest.getReservedDate(),
-                lessonRequest.getReservedTime());
+                lessonRequest.getTimeFrom(),
+                lessonRequest.getTimeTo(),
+                lessonRequest.getPrice(),
+                lessonRequest.getReservedDate());
 
         lessonService.save(newLesson);
 
-        return ResponseEntity.ok("Create new lesson" +"\n" + "time: " + lessonRequest.getReservedTime()+ "date: " + lessonRequest.getReservedDate());
+        return ResponseEntity.ok("Create new lesson" +"\n"
+                + "time from: " + lessonRequest.getTimeFrom()
+                + "\n time to:" + lessonRequest.getTimeTo()
+                + "date: " + lessonRequest.getReservedDate());
     }
 
     @PreAuthorize("hasRole('TEACHER')")
     @GetMapping("/participants")
     public ResponseEntity<?> getAllParticipants(){
 
-        List<Student> participants =  contractService.getAllContracts().stream().map(Contract::getStudent).collect(Collectors.toList());
-        List<ParticipantResponse> allParticipants = participants.stream().map(s ->studentService.getParticipant(s.getUser().getId())).collect(Collectors.toList());
+        List<Student> participants =  contractService.getAllContracts()
+                .stream()
+                .map(Contract::getStudent)
+                .collect(Collectors.toList());
+        List<ParticipantResponse> allParticipants = participants.
+                stream()
+                .map(s ->studentService.getParticipant(s.getUser().getId()))
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok(allParticipants);
     }

@@ -5,14 +5,17 @@ import com.appointment.entity.Lesson;
 import com.appointment.entity.Student;
 
 import com.appointment.services.implementation.ContractServiceImpl;
+import com.appointment.services.implementation.EmailServiceImpl;
 import com.appointment.services.implementation.LessonServiceImpl;
 import com.appointment.services.implementation.StudentServiceImpl;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 
@@ -30,6 +33,15 @@ public class StudentController {
     @Autowired
     private ContractServiceImpl contractService;
 
+    @Autowired
+    private EmailServiceImpl emailService;
+
+    @Value("${mail.bookingText}")
+    private String bookingText;
+
+    @Value("${mail.bookingText}")
+    private String declineText;
+
 
     @PreAuthorize("hasRole('STUDENT')")
     @GetMapping("/lessons")
@@ -40,16 +52,22 @@ public class StudentController {
 
     @PreAuthorize("hasRole('STUDENT')")
     @PostMapping("/book/{id}")
-    public ResponseEntity<?> bookLesson (@PathVariable("id") Long id) throws NotFoundException {
+    public ResponseEntity<?> bookLesson (@PathVariable("id") Long id) throws NotFoundException, MessagingException {
+
         Student student = studentService.getCurrentStudent();
         Lesson lesson = lessonService.findById(id);
-        contractService.createContract(student, lesson);
+        Contract newContract  = contractService.createContract(student, lesson);
+        //email to teacher for approve or decline contract
+        emailService.sendMail(lesson.getTeacher().getUser().getEmail(),"Online University", bookingText );
+        //email to student for decline contract, if he want
+        emailService.sendMail(student.getUser().getEmail(), "Online University", declineText);
+
         return ResponseEntity.ok("Booking lesson " +id + " is successful");
     }
 
     @PreAuthorize("hasRole('STUDENT')")
     @PostMapping("/refuse/{id}")
-    public ResponseEntity<?> refuseLesson (@PathVariable("id") Long id) throws NotFoundException {
+    public ResponseEntity<?> refuseLesson (@PathVariable("id") Long id) {
         Student student = studentService.getCurrentStudent();
         Contract contract = contractService.findById(id);
         contractService.delete(contract);

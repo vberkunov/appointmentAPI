@@ -8,8 +8,10 @@ import com.appointment.payload.request.SignupRequestDto;
 import com.appointment.security.jwt.JwtUtils;
 import com.appointment.security.services.UserDetailsImpl;
 
+import com.appointment.services.implementation.EmailServiceImpl;
 import com.appointment.services.implementation.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,7 +39,16 @@ public class AuthController {
     private PasswordEncoder encoder;
 
     @Autowired
+    private EmailServiceImpl emailService;
+
+    @Autowired
     private JwtUtils jwtUtils;
+
+    @Value("${mail.toStudent}")
+    private String studentText;
+
+    @Value("${mail.toTeacher}")
+    private String teacherText;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody SigninRequestDto requestDto) {
@@ -60,7 +72,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequestDto signUpRequest) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequestDto signUpRequest) throws MessagingException {
         if (userService.findByUsername(signUpRequest.getUsername()) != null) {
             return ResponseEntity
                     .badRequest()
@@ -90,12 +102,14 @@ public class AuthController {
                     // Create new student's account
 
                     userService.createStudent(user);
+                    emailService.sendMail(user.getEmail(),"Online University", studentText );
 
                     break;
                 case "teacher":
                     // Create new teacher's account
 
                     userService.createTeacher(user);
+                    emailService.sendMail(user.getEmail(),"Online University", teacherText);
 
                     break;
 

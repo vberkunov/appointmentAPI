@@ -2,7 +2,6 @@ package com.appointment.validator;
 
 import com.appointment.entity.Student;
 import com.appointment.entity.User;
-import com.appointment.services.StudentService;
 import com.appointment.services.implementation.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,6 +26,7 @@ public class UserValidator implements Validator {
         if(user.getEmail().length() < 8 || user.getEmail().length() > 35){
             errors.rejectValue("email","Size.userForm.email");
         }
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"username","Required");
         if (service.findByUsername(user.getUsername()) != null) {
             errors.rejectValue("username", "Duplicate.userForm.username");
         }

@@ -14,7 +14,7 @@ public interface ContractService {
     void approve(Long id) throws NotFoundException;
     void decline(Long id) throws NotFoundException;
 
-    void createContract(Student student, Lesson lesson);
+    Contract createContract(Student student, Lesson lesson);
 
     Contract findById(Long id);
 
