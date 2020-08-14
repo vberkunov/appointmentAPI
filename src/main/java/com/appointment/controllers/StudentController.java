@@ -8,6 +8,8 @@ import com.appointment.services.implementation.ContractServiceImpl;
 import com.appointment.services.implementation.EmailServiceImpl;
 import com.appointment.services.implementation.LessonServiceImpl;
 import com.appointment.services.implementation.StudentServiceImpl;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +24,7 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/student")
+@Api(value="onlineuniversity", description="Operations pertaining to student functionality. ")
 public class StudentController {
 
     @Autowired
@@ -45,6 +48,8 @@ public class StudentController {
 
     @PreAuthorize("hasRole('STUDENT')")
     @GetMapping("/lessons")
+
+    @ApiOperation(value = "Get information about current lessons.", response = Iterable.class)
     public ResponseEntity<?> getAllLessons(){
         List<Lesson> lessons =lessonService.getAll();
         return ResponseEntity.ok("Lessons: "+ lessons.toString());
@@ -52,21 +57,26 @@ public class StudentController {
 
     @PreAuthorize("hasRole('STUDENT')")
     @PostMapping("/book/{id}")
-    public ResponseEntity<?> bookLesson (@PathVariable("id") Long id) throws NotFoundException, MessagingException {
+    @ApiOperation(value = "Book a lesson by its identifier", response = Iterable.class)
+    public ResponseEntity<?> bookLesson (@PathVariable("id") Long id) throws Exception {
 
         Student student = studentService.getCurrentStudent();
         Lesson lesson = lessonService.findById(id);
-        Contract newContract  = contractService.createContract(student, lesson);
-        //email to teacher for approve or decline contract
-        emailService.sendMail(lesson.getTeacher().getUser().getEmail(),"Online University", bookingText );
-        //email to student for decline contract, if he want
-        emailService.sendMail(student.getUser().getEmail(), "Online University", declineText);
+        if(!contractService.findByStudent(student).getLesson().equals(lesson)){
+            Contract newContract = contractService.createContract(student, lesson);
+            //email to teacher for approve or decline contract
+            emailService.sendMail(lesson.getTeacher().getUser().getEmail(), "Online University", bookingText);
+            //email to student for decline contract, if he want
+            emailService.sendMail(student.getUser().getEmail(), "Online University", declineText);
 
-        return ResponseEntity.ok("Booking lesson " +id + " is successful");
+            return ResponseEntity.ok("Booking lesson " + id + " is successful");
+        }
+        else throw new Exception("This lesson is already reserved!");
     }
 
     @PreAuthorize("hasRole('STUDENT')")
     @PostMapping("/refuse/{id}")
+    @ApiOperation(value = "Give up the lesson.", response = Iterable.class)
     public ResponseEntity<?> refuseLesson (@PathVariable("id") Long id) {
         Student student = studentService.getCurrentStudent();
         Contract contract = contractService.findById(id);

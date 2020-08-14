@@ -69,4 +69,9 @@ public class ContractServiceImpl implements ContractService {
         contractRepository.delete(contract);
     }
 
+    @Override
+    public Contract findByStudent(Student student) {
+        return contractRepository.findByStudent(student);
+    }
+
 }

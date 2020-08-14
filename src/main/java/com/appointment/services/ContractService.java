@@ -19,4 +19,6 @@ public interface ContractService {
     Contract findById(Long id);
 
     void delete(Contract contract);
+
+    Contract findByStudent(Student student);
 }

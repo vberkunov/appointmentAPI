@@ -1,13 +1,14 @@
 package com.appointment.entity;
 
 
+
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
+
 
 
 @Entity
@@ -24,6 +25,7 @@ public class User {
     private String email;
 
     @Column(name = "username")
+
     private String username;
 
     @Column(name = "password")
@@ -57,12 +59,15 @@ public class User {
     @OneToOne(mappedBy = "user")
     private Teacher teacher;
 
-    public User(String email, String username, String password, String firstName, String lastName ) {
+    public User(String email, String username, String password, String firstName, String lastName, Date created, Status status) {
         this.email = email;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.created = created;
+        this.status = status;
+        this.updated = created;
 
 
     }
